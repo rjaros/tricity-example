@@ -3,27 +3,26 @@ package com.example.project
 actual class CharacterService : ICharacterService {
 
     override suspend fun getCharacters(): List<MovieCharacter> {
-        return Repository.getCharacters()
+        return Repostiory.getCharacters()
     }
 
-    override suspend fun addCharacter(character: MovieCharacter): Boolean {
-        Repository.addCharacter(character)
+    override suspend fun add(movieCharacter: MovieCharacter): Boolean {
+        Repostiory.add(movieCharacter)
         return true
     }
 
     override suspend fun movies(search: String?, state: String?): List<String> {
-        return Repository.getCharacters().map { it.title }.distinct()
+        return Repostiory.getCharacters().map { it.title }.distinct()
     }
+
 }
 
-object Repository {
-
+object Repostiory {
     private val characters = mutableListOf<MovieCharacter>()
 
     fun getCharacters() = characters
 
-    fun addCharacter(movieCharacter: MovieCharacter) {
+    fun add(movieCharacter: MovieCharacter) {
         characters += movieCharacter
     }
-
 }

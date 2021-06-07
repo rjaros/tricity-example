@@ -21,7 +21,6 @@ import io.kvision.state.observableListOf
 import io.kvision.state.sub
 import io.kvision.utils.perc
 import io.kvision.utils.px
-import io.kvision.utils.syncWithList
 import kotlinx.coroutines.launch
 
 class App : Application() {
@@ -56,31 +55,24 @@ class App : Application() {
                         }
                     }
                 }
-                formPanel<MovieCharacter> {
-                    fieldsetPanel("Movie character") {
+                val form = formPanel<MovieCharacter> {
+                    fieldsetPanel(legend = "Movie character") {
                         text(label = "Name:").bind(MovieCharacter::name, required = true)
-                        typeaheadRemote(CharacterServiceManager, ICharacterService::movies, label = "Title:").bind(
-                            MovieCharacter::title,
-                            required = true
-                        )
+                        typeaheadRemote(CharacterServiceManager, ICharacterService::movies, label = "Movie title").bind(MovieCharacter::title, required = true)
                     }
-                    button("Add character", "fas fa-plus").onClickLaunch {
-                        with(this@formPanel) {
-                            if (this.validate()) {
-                                val character = this.getData()
-                                characters += character
-                                characterService.addCharacter(character)
-                                this.clearData()
-                                this.focus()
-                            }
-                        }
-                    }
+                }
+                button("Add character", "fas fa-plus").onClickLaunch {
+                    val character = form.getData()
+                    characters += character
+                    characterService.add(character)
+                    form.clearData()
+                    form.focus()
                 }
             }
         }
         KVScope.launch {
             val chars = characterService.getCharacters()
-            characters.syncWithList(chars)
+            characters.addAll(chars)
         }
     }
 }

@@ -9,7 +9,8 @@ data class MovieCharacter(val name: String, val title: String)
 @KVService
 interface ICharacterService {
     suspend fun getCharacters(): List<MovieCharacter>
-    suspend fun addCharacter(character: MovieCharacter): Boolean
+    suspend fun add(movieCharacter: MovieCharacter): Boolean
 
     suspend fun movies(search: String?, state: String?): List<String>
+
 }
